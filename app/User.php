@@ -46,7 +46,7 @@ class User extends Authenticatable
                 'image'=>'default/ccRp67CBjTSpm5R0SlR82dHK0qe0dpkj9CI6MepV.png'
             ];
             $user->profile()->create($data);
-            Mail::to($user->email)->send(new NewUserWelcomeMail());
+            //Mail::to($user->email)->send(new NewUserWelcomeMail());
         });
     }
 
@@ -59,6 +59,10 @@ class User extends Authenticatable
         return $this->hasMany(Post::class)->orderBy('created_at', 'DESC');
     }
 
+    public function like()
+    {
+        return $this->belongsToMany(Post::class);
+    }
     public function profile()
     {
         return $this->hasOne(Profile::class);

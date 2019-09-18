@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Post;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Intervention\Image\Facades\Image;
 
 class PostsController extends Controller
@@ -27,13 +28,22 @@ class PostsController extends Controller
         //paginate(number of records in the page)
         //with('relationship name')
         $posts=Post::whereIn('user_id',$users)->with('user')->latest()->paginate(5);
+
+//        $liked =auth()->user()->like->contains($_post->id);
+       //$likes=$post->liked->count();
         //dd($posts);
         return view('posts.index',compact('posts'));
 }
-    public function show($post)
+    public function show(Post $post)
     {
-        $_post = Post::findOrFail($post);
-        return view('posts.show',compact('_post'));
+        //$_post = Post::findOrFail($post);
+        $_post=$post;
+        $follows = (auth()->user()) ? auth()->user()->following->contains($_post->user->id) : false;
+
+        //$liked = ($_post->id) ? auth()->user()->like->contains($_post->id) : false;
+        $liked =auth()->user()->like->contains($_post->id);
+        $likes=$post->liked->count();
+        return view('posts.show',compact('_post','follows','liked','likes'));
     }
     public function store()
     {
@@ -56,7 +66,7 @@ class PostsController extends Controller
 
         //Post::create($data);
         // dd(request()->all());
-        return redirect(route('profile.show',['profile'=>auth()->user()->id]));
+        return redirect(route('profile.show',['profile'=>auth()->user()->username]));
 
     }
 

@@ -10,14 +10,18 @@
                 <div class="d-flex justify-content-between align-items-baseline">
                     <div class="d-flex align-items-center pb-3">
                         <div class="h4">{{$user->username}}</div>
+                        @if(!auth()->guest())
+                            @if(Route::current()->originalParameter('profile')!= auth()->user()->username)
                         <follow-button user-id="{{$user->id}}" follows="{{$follows}}"></follow-button>
+                    @endif
+                            @endif
                     </div>
                     @can('update',$user->profile)
                         <a href="{{route('post.create')}}">Add New Post</a>
                     @endcan
                 </div>
                 @can('update',$user->profile)
-                    <a href="{{route('profile.edit',['profile'=>Auth::user()->id])}}">Edit Profile </a>
+                    <a href="{{route('profile.edit',['profile'=>Auth::user()->username])}}">Edit Profile </a>
                 @endcan
                 <div class="d-flex">
                     <div class="pr-5"><strong>{{$postsCount}}</strong> posts</div>

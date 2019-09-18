@@ -17,10 +17,10 @@
                         <div>
                             <div class="font-weight-bold">
                                 <a  href="
-                                    {{route('profile.show',['profile'=>$_post->user->id])}}">
+                                    {{route('profile.show',['profile'=>$_post->user->username])}}">
                                     <span class="text-dark">{{$_post->user->username}}</span></a>
                                 <span class="pr-1 pl-1">•</span>
-                                <a href="#" >Follow</a>
+                                <follow-button user-id="{{$_post->user->id}}" follows="{{$follows}}"></follow-button>
                             </div>
                         </div>
                     </div>
@@ -28,12 +28,15 @@
 
                     <p>
                         <span class="font-weight-bold"><a href="
-                                    {{route('profile.show',['profile'=>$_post->user->id])}}">
+                                    {{route('profile.show',['profile'=>$_post->user->username])}}">
                                 <span class="text-dark">{{$_post->user->username}}</span>
                             </a>
                         </span>
                         {{$_post->caption}}
+                        <like-button post-id="{{$_post->id}}" likes="{{$liked}}" count="{{$likes}}"></like-button>
                     </p>
+
+
                 </div>
             </div>
         </div>

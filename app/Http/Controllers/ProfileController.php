@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Profile;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
 use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
 {
 
-    public function edit(User $profile)
+    public function edit( $profile)
     {
-        $user = $profile;
+        //$user = $profile;
+        $user =User::where('username',$profile)->get();
+        $user=$user[0];
         //to authorize update operation to let only the current user to update his profile
         $this->authorize('update', $user->profile);
         return view('profile.edit',
@@ -20,9 +24,10 @@ class ProfileController extends Controller
         );
     }
 
-    public function update(User $profile)
+    public function update( $profile)
     {
-        $user = $profile;
+        $user =User::where('username',$profile)->get();
+        $user=$user[0];
         //to authorize update operation to let only the current user to update his profile
         $this->authorize('update', $user->profile);
         $data = request()->validate([
@@ -53,13 +58,18 @@ class ProfileController extends Controller
             $imageArray ?? []
         ));
 
-        return redirect(route('profile.show', ['profile' => auth()->user()->id]));
+        return redirect(route('profile.show', ['profile' => auth()->user()->username]));
     }
 
-    public function show(User $profile)
+    public function show( $profile)
     {
         //$user = User::findOrFail($profile);
-        $user = $profile;
+        // get user by using username
+        $user =User::where('username',$profile)->get();
+
+        //$user = $profile;
+        //dd($user[0]->id);
+        $user=$user[0];
         //this for the following button to check if this profile is followed or not
         $follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
         //dd($follows);
@@ -114,7 +124,7 @@ class ProfileController extends Controller
         auth()->user()->profile->create($data);
         //Post::create($data);
         // dd(request()->all());
-        return redirect(route('profile.show', ['profile' => auth()->user()->id]));
+        return redirect(route('profile.show', ['profile' => auth()->user()->username]));
 
     }
 }

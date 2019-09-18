@@ -14,7 +14,7 @@
                     @endcan
                 </div>
                 @can('update',$user->profile)
-                    <a href="{{route('profile.edit',['profile'=>Auth::user()->id])}}">Edit Profile </a>
+                    <a href="{{route('profile.edit',['profile'=>Auth::user()->username])}}">Edit Profile </a>
                 @endcan
                 <div class="d-flex">
                     <div class="pr-5"><strong>{{$user->posts->count()}}</strong> posts</div>

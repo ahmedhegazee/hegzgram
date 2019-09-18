@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="btn">
         <button class="btn btn-primary ml-4" @click="followUser" v-text="buttonText"></button>
     </div>
 </template>
@@ -8,7 +8,7 @@
     export default {
         props: ['userId', 'follows'],
         mounted() {
-            console.log('Component mounted.')
+            //console.log('Component mounted.')
         },
         data: function () {
             return {
@@ -36,3 +36,9 @@
         }
     }
 </script>
+<style>
+
+    #btn{
+        display: inline;
+    }
+</style>

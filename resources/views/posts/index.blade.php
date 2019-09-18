@@ -5,7 +5,7 @@
         @foreach($posts as $_post)
             <div class="row ">
                 <div class="col-6 offset-3">
-                    <a href="{{route('profile.show',['profile'=>$_post->user->id])}}">
+                    <a href="{{route('post.show',['post'=>$_post->id])}}">
                         <img src="/storage/{{$_post->image}}" class="w-100">
                     </a>
                 </div>
@@ -15,11 +15,12 @@
                     <div>
                         <p>
                         <span class="font-weight-bold"><a href="
-                                    {{route('profile.show',['profile'=>$_post->user->id])}}">
+                                    {{route('profile.show',['profile'=>$_post->user->username])}}">
                                 <span class="text-dark">{{$_post->user->username}}</span>
                             </a>
                         </span>
                             {{$_post->caption}}
+                            <like-button post-id="{{$_post->id}}" likes="{{auth()->user()->like->contains($_post->id)}}" count="{{$_post->liked->count()}}"></like-button>
                         </p>
                     </div>
                 </div>

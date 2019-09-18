@@ -24,6 +24,8 @@ Auth::routes();
 //    return ['success'];
 //});
 Route::post('/follow/{user}','FollowsController@store');
+Route::post('/like/{post}','LikesController@store');
+Route::post('/like/{post}/count','LikesController@count');
 //Profile Routes
 //Route::get('/profile/create','ProfileController@create')->name('profile.create');
 Route::get('/profile/{profile}','ProfileController@show')->name('profile.show');
