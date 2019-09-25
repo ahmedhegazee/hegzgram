@@ -13,6 +13,7 @@
 
 use App\Mail\NewUserWelcomeMail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/email',function(){
@@ -39,4 +40,6 @@ Route::get('/post/create','PostsController@create')->name('post.create');
 Route::get('/post/{post}','PostsController@show')->name('post.show');
 Route::post('/post','PostsController@store')->name('post.store');
 
+Route::get('/profile/{profile}/followers','ProfileController@followers')->name('profile.followers');
+Route::get('/profile/{profile}/followings','ProfileController@followings')->name('profile.followings');
 

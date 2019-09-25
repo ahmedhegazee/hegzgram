@@ -6,7 +6,7 @@
             <div class="row ">
                 <div class="col-6 offset-3">
                     <a href="{{route('post.show',['post'=>$_post->id])}}">
-                        <img src="/storage/{{$_post->image}}" class="w-100">
+                        <img src="{{$_post->postImage()}}" class="w-100">
                     </a>
                 </div>
             </div>
@@ -14,7 +14,8 @@
                 <div class="col-6 offset-3">
                     <div>
                         <p>
-                        <span class="font-weight-bold"><a href="
+                            <img src="{{$_post->user->profile->profileImage()}}" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
+                            <span class="font-weight-bold"><a href="
                                     {{route('profile.show',['profile'=>$_post->user->username])}}">
                                 <span class="text-dark">{{$_post->user->username}}</span>
                             </a>

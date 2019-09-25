@@ -60,7 +60,7 @@ class PostsController extends Controller
         $image = Image::make(public_path("storage/{$imagePath}" ))->fit(1200, 1200);
         $image->save();
         //store the image path in image field in data array
-        $data['image'] = $imagePath;
+        $data['image'] = "/storage/".$imagePath;
         //add user id when you create new record in post table
         auth()->user()->posts()->create($data);
 

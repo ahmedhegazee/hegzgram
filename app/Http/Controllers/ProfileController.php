@@ -66,7 +66,7 @@ class ProfileController extends Controller
         //$user = User::findOrFail($profile);
         // get user by using username
         $user =User::where('username',$profile)->get();
-
+//dd($user);
         //$user = $profile;
         //dd($user[0]->id);
         $user=$user[0];
@@ -119,12 +119,29 @@ class ProfileController extends Controller
         $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
         $image->save();
         //store the image path in image field in data array
-        $data['image'] = $imagePath;
+        $data['image'] = "/storage/".$imagePath;
         //add user id when you create new record in post table
         auth()->user()->profile->create($data);
         //Post::create($data);
         // dd(request()->all());
         return redirect(route('profile.show', ['profile' => auth()->user()->username]));
 
+    }
+
+    public function followers($profile)
+    {
+        $user =User::where('username',$profile)->get();
+        //dd($user);
+        $followers = $user[0]->profile->followers;
+//        dd($followers->toArray());
+        return view('profile.followers',compact('followers'));
+    }
+    public function followings($profile)
+    {
+        $user =User::where('username',$profile)->get();
+        //dd($user);
+        $followings = $user[0]->following;
+//        dd($followers->toArray());
+        return view('profile.followings',compact('followings'));
     }
 }

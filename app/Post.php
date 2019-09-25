@@ -18,4 +18,11 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function postImage()
+    {
+        //$image ='/storage/'.$this->image;
+        $image = $this->image;
+        return $image ;
+    }
 }

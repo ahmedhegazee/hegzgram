@@ -25,8 +25,8 @@
                 @endcan
                 <div class="d-flex">
                     <div class="pr-5"><strong>{{$postsCount}}</strong> posts</div>
-                    <div class="pr-5"><strong>{{ $followersCount}}</strong> followers</div>
-                    <div class="pr-5"><strong>{{$followeringsCount}}</strong> following</div>
+                    <a href="{{route('profile.followers',['profile'=>$user->username])}}" class="pr-5"><strong>{{ $followersCount}}</strong> followers</a>
+                    <a href="{{route('profile.followings',['profile'=>$user->username])}}" class="pr-5"><strong>{{$followeringsCount}}</strong> following</a>
                 </div>
                 <div class="pt-4 font-weight-bold">{{$user->profile->title}}</div>
                 <div>{{$user->profile->description}}</div>
@@ -37,7 +37,7 @@
                 @foreach($user->posts as $post)
                     <div class="col-4 pb-5">
                         <a href="{{route('post.show',['post'=>$post->id])}}">
-                            <img src="/storage/{{$post->image}}" class="w-100">
+                            <img src="{{$post->postImage()}}" class="w-100">
                         </a>
 
                     </div>

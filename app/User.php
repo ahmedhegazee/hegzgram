@@ -45,7 +45,7 @@ class User extends Authenticatable
                 'title'=>$user->username,
                 'image'=>'default/ccRp67CBjTSpm5R0SlR82dHK0qe0dpkj9CI6MepV.png'
             ];
-            $user->profile()->create($data);
+            //$user->profile()->create($data);
             //Mail::to($user->email)->send(new NewUserWelcomeMail());
         });
     }
