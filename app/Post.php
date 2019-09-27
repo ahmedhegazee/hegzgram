@@ -25,4 +25,9 @@ class Post extends Model
         $image = $this->image;
         return $image ;
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

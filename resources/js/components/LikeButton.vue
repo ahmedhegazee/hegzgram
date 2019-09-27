@@ -21,6 +21,7 @@
 
             }
         },
+        name:'like-button',
 
         methods: {
             likePost() {

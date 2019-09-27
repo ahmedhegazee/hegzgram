@@ -21,7 +21,13 @@ class Profile extends Model
     {
         $defaultImage='default/ccRp67CBjTSpm5R0SlR82dHK0qe0dpkj9CI6MepV.png';
         $image = ($this->image) ? ($this->image):$defaultImage;
+
 //        return '/storage/'.$image;
         return $image;
+    }
+
+    public function comments()
+    {
+        $this->hasMany(Comment::class);
     }
 }
