@@ -36,8 +36,27 @@
                         <like-button post-id="{{$_post->id}}" likes="{{$liked}}" count="{{$likes}}"></like-button>
                     </p>
 
-
                 </div>
+                @foreach($comments as $comment)
+                    <div class="row ">
+                      <p>
+                           <img src="{{$comment->profile->profileImage()}}" class="rounded-circle w-100"
+                                style="max-width: 30px">
+                           <span class="font-weight-bold">
+                            <a href="{{route('profile.show',['profile'=>$comment->profile->user->username])}}">
+                                <span class="text-dark">{{$comment->profile->user->username}}</span>
+                            </a>
+                        </span> <span>{{$comment->content}}</span>
+
+
+                      </p>
+
+
+
+                    </div>
+                    @endforeach
+                <a href="{{route('comment.create',['post'=>$_post->id])}}" class="btn btn-primary">Add Comment</a>
+
             </div>
         </div>
     </div>

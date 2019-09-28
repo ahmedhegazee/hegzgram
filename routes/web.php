@@ -43,3 +43,5 @@ Route::post('/post','PostsController@store')->name('post.store');
 Route::get('/profile/{profile}/followers','ProfileController@followers')->name('profile.followers');
 Route::get('/profile/{profile}/followings','ProfileController@followings')->name('profile.followings');
 
+Route::get('/comment/{post}/create','CommentsController@create')->name('comment.create');
+Route::post('/comment/{post}','CommentsController@store')->name('comment.store');

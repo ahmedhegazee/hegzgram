@@ -1905,6 +1905,7 @@ __webpack_require__.r(__webpack_exports__);
       likesCount: this.count
     };
   },
+  name: 'like-button',
   methods: {
     likePost: function likePost() {
       var _this = this;
@@ -37928,7 +37929,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "btn" } }, [
     _c("button", {
-      staticClass: "btn btn-primary ml-4",
+      staticClass: "btn btn-primary",
       domProps: { textContent: _vm._s(_vm.buttonText) },
       on: { click: _vm.followUser }
     })
@@ -37958,15 +37959,12 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "likebtn" } }, [
     _c("i", {
-      staticClass: "fas fa-heart pl-2",
+      staticClass: "fas fa-heart",
       class: { like: _vm.isLiked, unlike: _vm.isUnLiked },
       on: { click: _vm.likePost }
     }),
     _vm._v(" "),
-    _c("span", {
-      staticClass: "pl-2",
-      domProps: { textContent: _vm._s(_vm.likesCount) }
-    })
+    _c("span", { domProps: { textContent: _vm._s(_vm.likesCount) } })
   ])
 }
 var staticRenderFns = []

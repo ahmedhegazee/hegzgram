@@ -35,8 +35,27 @@
                         <like-button post-id="<?php echo e($_post->id); ?>" likes="<?php echo e($liked); ?>" count="<?php echo e($likes); ?>"></like-button>
                     </p>
 
-
                 </div>
+                <?php $__currentLoopData = $comments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $comment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div class="row ">
+                      <p>
+                           <img src="<?php echo e($comment->profile->profileImage()); ?>" class="rounded-circle w-100"
+                                style="max-width: 30px">
+                           <span class="font-weight-bold">
+                            <a href="<?php echo e(route('profile.show',['profile'=>$comment->profile->user->username])); ?>">
+                                <span class="text-dark"><?php echo e($comment->profile->user->username); ?></span>
+                            </a>
+                        </span> <span><?php echo e($comment->content); ?></span>
+
+
+                      </p>
+
+
+
+                    </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <a href="<?php echo e(route('comment.create',['post'=>$_post->id])); ?>" class="btn btn-primary">Add Comment</a>
+
             </div>
         </div>
     </div>

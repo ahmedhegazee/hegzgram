@@ -21,6 +21,9 @@
                             <?php echo e($_post->caption); ?>
 
                             <like-button post-id="<?php echo e($_post->id); ?>" likes="<?php echo e(auth()->user()->like->contains($_post->id)); ?>" count="<?php echo e($_post->liked->count()); ?>"></like-button>
+                            <i class="far fa-comment pl-2"></i>
+                            <span><?php echo e($_post->commentsCount()); ?></span>
+
                         </p>
                     </div>
                 </div>

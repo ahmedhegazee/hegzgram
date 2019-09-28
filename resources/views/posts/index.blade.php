@@ -22,6 +22,9 @@
                         </span>
                             {{$_post->caption}}
                             <like-button post-id="{{$_post->id}}" likes="{{auth()->user()->like->contains($_post->id)}}" count="{{$_post->liked->count()}}"></like-button>
+                            <i class="far fa-comment pl-2"></i>
+                            <span>{{$_post->commentsCount()}}</span>
+
                         </p>
                     </div>
                 </div>

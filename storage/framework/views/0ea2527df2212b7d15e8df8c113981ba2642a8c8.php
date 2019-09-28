@@ -61,6 +61,7 @@
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <img src="<?php echo e(Auth::user()->profile->profileImage()); ?>" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
                                 <?php echo e(Auth::user()->name); ?> <span class="caret"></span>
                             </a>
 

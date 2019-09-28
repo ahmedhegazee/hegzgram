@@ -22,13 +22,16 @@ class PostsController extends Controller
 
     public function index()
     {
-        $users = auth()->user()->following()->pluck('profiles.user_id');
+        $users = auth()->user()->following()->pluck('profiles.user_id')->toArray();
         //latest() == orderBy('created_at','DESC')
         //$posts=Post::whereIn('user_id',$users)->latest()->get();
         //paginate(number of records in the page)
         //with('relationship name')
-        $posts=Post::whereIn('user_id',$users)->with('user')->latest()->paginate(5);
+        $id ="".auth()->user()->id;
+        array_push($users,$id);
 
+
+        $posts=Post::whereIn('user_id',$users)->with('user')->latest()->paginate(5);
 //        $liked =auth()->user()->like->contains($_post->id);
        //$likes=$post->liked->count();
         //dd($posts);
@@ -43,7 +46,10 @@ class PostsController extends Controller
         //$liked = ($_post->id) ? auth()->user()->like->contains($_post->id) : false;
         $liked =auth()->user()->like->contains($_post->id);
         $likes=$post->liked->count();
-        return view('posts.show',compact('_post','follows','liked','likes'));
+        $comments = $post->comments;
+
+
+        return view('posts.show',compact('_post','follows','liked','likes','comments'));
     }
     public function store()
     {
