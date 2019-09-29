@@ -49,6 +49,7 @@
 
 
                       </p>
+                        <like-comment-button comment-id="<?php echo e($comment->id); ?>" likes="<?php echo e(auth()->user()->likeComment->contains($comment->id)); ?>" count="<?php echo e($comment->liked->count()); ?>"></like-comment-button>
 
 
 

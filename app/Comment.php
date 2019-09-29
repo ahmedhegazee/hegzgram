@@ -17,4 +17,8 @@ class Comment extends Model
     {
         return $this->belongsTo(Profile::class);
     }
+    public function liked()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

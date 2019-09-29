@@ -50,6 +50,7 @@
 
 
                       </p>
+                        <like-comment-button comment-id="{{$comment->id}}" likes="{{auth()->user()->likeComment->contains($comment->id)}}" count="{{$comment->liked->count()}}"></like-comment-button>
 
 
 
