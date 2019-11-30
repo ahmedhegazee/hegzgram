@@ -29,12 +29,12 @@ endif; ?>
 
                     </div>
                     <div class="row">
-                        <label for="image" class="col-md-4 col-form-label ">Post Image</label>
-                        <input type="file" class="form-control-file" required id="image" name="image">
+                        <label for="resource" class="col-md-4 col-form-label ">Post Image</label>
+                        <input type="file" class="form-control-file" required id="resource" name="resource">
 
-                        <?php if ($errors->has('image')) :
+                        <?php if ($errors->has('resource')) :
 if (isset($message)) { $messageCache = $message; }
-$message = $errors->first('image'); ?>
+$message = $errors->first('resource'); ?>
                         <strong><?php echo e($message); ?></strong>
                         <?php unset($message);
 if (isset($messageCache)) { $message = $messageCache; }

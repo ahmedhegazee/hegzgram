@@ -17,7 +17,9 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->string('caption');
-            $table->string('image');
+            $table->string('resource');
+            $table->unsignedBigInteger('resource_type_id')->default(1);
+            $table->foreign('resource_type_id')->on('resource_types')->references('id');
             $table->timestamps();
             $table->index("user_id");
         });

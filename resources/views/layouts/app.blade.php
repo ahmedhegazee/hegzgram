@@ -18,10 +18,11 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <style>
         @media (min-width: 1200px) {
             .container {
-                max-width: 900px;
+                max-width: 1000px;
             }
         }
     </style>
@@ -29,9 +30,9 @@
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-        <div class="container">
+        <div class="container" >
             <a class="navbar-brand" href="{{ url('/') }}">
-                HegzGram
+                Social Media
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -75,6 +76,7 @@
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
+
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                       style="display: none;">
                                     @csrf
@@ -84,12 +86,33 @@
                     @endguest
                 </ul>
             </div>
+           @guest
+
+            @else
+            <i id="search"  onclick="showSearch()" class="fas fa-search" style="font-size:16pt;color: rgba(0, 0, 0, 0.5);"></i>
+        @endguest
         </div>
     </nav>
+
 
     <main class="py-4">
         @yield('content')
     </main>
+    <div id="overlay" class="overlay d-none">
+        <div class="content">
+            <i id="close" onclick="closeSearch()"  class="fas fa-times"></i>
+            <h3 class="text-center mb-4">Search for profiles</h3>
+
+            <search-bar user-id="{{auth()->user()!=null?auth()->user()->id:0}}"></search-bar>
+        </div>
 </div>
+
+
+
+
+
+</div>
+<script src="{{asset('js/script.js')}}"></script>
 </body>
+
 </html>

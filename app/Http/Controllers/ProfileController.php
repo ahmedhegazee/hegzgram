@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Friend;
 use App\Profile;
 use App\User;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
 {
+
 
     public function edit( $profile)
     {
@@ -26,8 +28,8 @@ class ProfileController extends Controller
 
     public function update( $profile)
     {
-        $user =User::where('username',$profile)->get();
-        $user=$user[0];
+        $user =User::where('username',$profile)->first();
+
         //to authorize update operation to let only the current user to update his profile
         $this->authorize('update', $user->profile);
         $data = request()->validate([
@@ -65,13 +67,27 @@ class ProfileController extends Controller
     {
         //$user = User::findOrFail($profile);
         // get user by using username
-        $user =User::where('username',$profile)->get();
+        $user =User::where('username',$profile)->first();
+//        dd($profile);
 //dd($user);
         //$user = $profile;
         //dd($user[0]->id);
-        $user=$user[0];
-        //this for the following button to check if this profile is followed or not
-        $follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
+        if(!auth()->guest()){
+            //this for the following button to check if this profile is followed or not
+            $follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
+//        $friend = (auth()->user()) ? auth()->user()->friends->contains($user->id) : false;
+            $friend=auth()->user()->friends->contains($user->id);
+            if($friend)
+                $accept=auth()->user()->friends()->where('profile_id',$user->id)->first()->pivot->status;
+            else
+                $accept=false;
+        }
+        else{
+            $follows=0;
+            $friend=0;
+            $accept=0;
+        }
+
         //dd($follows);
 //        $postsCount = Cache::remember('count.posts.' . $user->id, function () use ($user) {
 //            return $user->posts->count();
@@ -93,13 +109,24 @@ class ProfileController extends Controller
             function () use ($user) {
                 return $user->following->count();
             });
+        $friendsCount = Cache::remember(
+            'count.friends.' . $user->id,
+            now()->addSeconds(30),
+            function () use ($user) {
+                return $user->friends()->where('status',1)->count();
+            });
+        $posts=$user->posts()->paginate(15);
         return view('profile.show',
             compact(
                 'user',
                 'follows',
                 'followeringsCount',
                 'followersCount',
-                'postsCount'
+                'postsCount',
+                'posts',
+                'friend',
+                'accept',
+                'friendsCount'
             )
         );
     }
@@ -144,4 +171,19 @@ class ProfileController extends Controller
 //        dd($followers->toArray());
         return view('profile.followings',compact('followings'));
     }
+
+    public function friends(Profile $profile)
+    {
+       $friends =Friend::where('user_id',$profile->id)->where('status',1)->with('profile')->get();
+       $friends =$friends->concat(Friend::where('profile_id',$profile->id)->where('status',1)->with('user')->get());
+
+//        $friends=$profile->friends()->where('status',1)->get();
+//
+//        $friends=$friends->concat($profile->user->friends()->where('status',1)->get());
+//        dd($friends);
+
+//        dd($profile->user->friends()->where('status',1)->get());
+        $waitings=Friend::where('status',0)->where('profile_id',$profile->id)->with('profile')->get();
+        return view('profile.friends',compact('friends','waitings','profile'));
+        }
 }

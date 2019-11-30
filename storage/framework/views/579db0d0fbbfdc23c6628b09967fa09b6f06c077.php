@@ -6,29 +6,7 @@
                     <div class="row">
                         <h2>Add New Comment</h2>
                     </div>
-                    <div class="form-group row">
-                        <label for="content" class="col-md-4 col-form-label ">Comment Content</label>
-
-                        <input id="content" type="text"
-                               class="form-control <?php if ($errors->has('content')) :
-if (isset($message)) { $messageCache = $message; }
-$message = $errors->first('content'); ?> is-invalid <?php unset($message);
-if (isset($messageCache)) { $message = $messageCache; }
-endif; ?>" name="content"
-                               value="<?php echo e(old('content')); ?>" required autocomplete="content" autofocus>
-
-                        <?php if ($errors->has('content')) :
-if (isset($message)) { $messageCache = $message; }
-$message = $errors->first('content'); ?>
-                        <span class="invalid-feedback" role="alert">
-                                        <strong><?php echo e($message); ?></strong>
-                                    </span>
-                        <?php unset($message);
-if (isset($messageCache)) { $message = $messageCache; }
-endif; ?>
-
-                    </div>
-
+                    <?php echo $__env->make('layouts.form', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     <div class="row pt-4">
                         <button class="btn btn-primary">Add New Comment</button>
                     </div>

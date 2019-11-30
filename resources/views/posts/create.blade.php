@@ -23,10 +23,10 @@
 
                     </div>
                     <div class="row">
-                        <label for="image" class="col-md-4 col-form-label ">Post Image</label>
-                        <input type="file" class="form-control-file" required id="image" name="image">
+                        <label for="resource" class="col-md-4 col-form-label ">Post Image</label>
+                        <input type="file" class="form-control-file" required id="resource" name="resource">
 
-                        @error('image')
+                        @error('resource')
                         <strong>{{ $message }}</strong>
                         @enderror
 

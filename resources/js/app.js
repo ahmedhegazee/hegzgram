@@ -20,8 +20,14 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('follow-button', require('./components/FollowButton.vue').default);
+Vue.component('friend-button', require('./components/FriendButton.vue').default);
+Vue.component('accept-button', require('./components/AcceptButton.vue').default);
 Vue.component('like-button', require('./components/LikeButton.vue').default);
-Vue.component('like-comment-button', require('./components/LikeCommentButton.vue').default);
+Vue.component('search-bar', require('./components/SearchBar.vue').default);
+Vue.component('post', require('./components/Post.vue').default);
+Vue.component('comment', require('./components/Comment.vue').default);
+Vue.component('reply', require('./components/Reply.vue').default);
+// Vue.component('add-new-post', require('./components/AddNewPost.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -31,4 +37,6 @@ Vue.component('like-comment-button', require('./components/LikeCommentButton.vue
 
 const app = new Vue({
     el: '#app',
+
+
 });

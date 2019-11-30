@@ -18,10 +18,11 @@
 
     <!-- Styles -->
     <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('css/style.css')); ?>" rel="stylesheet">
     <style>
         @media (min-width: 1200px) {
             .container {
-                max-width: 900px;
+                max-width: 1000px;
             }
         }
     </style>
@@ -29,9 +30,9 @@
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-        <div class="container">
+        <div class="container" >
             <a class="navbar-brand" href="<?php echo e(url('/')); ?>">
-                HegzGram
+                Social Media
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -76,6 +77,7 @@
                                     <?php echo e(__('Logout')); ?>
 
                                 </a>
+
                                 <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST"
                                       style="display: none;">
                                     <?php echo csrf_field(); ?>
@@ -85,13 +87,34 @@
                     <?php endif; ?>
                 </ul>
             </div>
+           <?php if(auth()->guard()->guest()): ?>
+
+            <?php else: ?>
+            <i id="search"  onclick="showSearch()" class="fas fa-search" style="font-size:16pt;color: rgba(0, 0, 0, 0.5);"></i>
+        <?php endif; ?>
         </div>
     </nav>
+
 
     <main class="py-4">
         <?php echo $__env->yieldContent('content'); ?>
     </main>
+    <div id="overlay" class="overlay d-none">
+        <div class="content">
+            <i id="close" onclick="closeSearch()"  class="fas fa-times"></i>
+            <h3 class="text-center mb-4">Search for profiles</h3>
+
+            <search-bar user-id="<?php echo e(auth()->user()!=null?auth()->user()->id:0); ?>"></search-bar>
+        </div>
 </div>
+
+
+
+
+
+</div>
+<script src="<?php echo e(asset('js/script.js')); ?>"></script>
 </body>
+
 </html>
 <?php /**PATH /Users/ahmedhegazy/Desktop/lar/hegzgram/resources/views/layouts/app.blade.php ENDPATH**/ ?>

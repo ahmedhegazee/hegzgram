@@ -8,6 +8,7 @@ class Profile extends Model
 {
     //
     protected $guarded=[];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -15,7 +16,7 @@ class Profile extends Model
 
     public function followers()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withTimestamps();
 }
     public function profileImage()
     {
@@ -30,4 +31,17 @@ class Profile extends Model
     {
         $this->hasMany(Comment::class);
     }
+    public function replies()
+    {
+        $this->hasMany(Reply::class);
+    }
+    public function friends()
+    {
+        return $this->belongsToMany(User::class,'friends')
+            ->using('App\Friend')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+
+
 }

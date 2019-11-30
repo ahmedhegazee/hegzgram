@@ -1,24 +1,46 @@
 <?php $__env->startSection('content'); ?>
+
     <div class="container">
         <div class="row">
-            <div class="col-8">
-                <img src="<?php echo e($_post->postImage()); ?>" class="w-100">
+            <div class="col-7">
+                <img src="<?php echo e($_post->postImage($_post->type)); ?>" class="w-100">
             </div>
 
-            <div class="col-4">
+            <div class="col-5">
                 <div>
                     <div class="d-flex align-items-center">
                         <div class="pr-3">
+
                             <img src="<?php echo e($_post->user->profile->profileImage()); ?>" class="rounded-circle w-100"
                                  style="max-width: 40px">
                         </div>
                         <div>
                             <div class="font-weight-bold">
-                                <a  href="
+                                <a href="
                                     <?php echo e(route('profile.show',['profile'=>$_post->user->username])); ?>">
                                     <span class="text-dark"><?php echo e($_post->user->username); ?></span></a>
-                                <span class="pr-1 pl-1">•</span>
-                                <follow-button user-id="<?php echo e($_post->user->id); ?>" follows="<?php echo e($follows); ?>"></follow-button>
+                                <?php if(auth()->guard()->guest()): ?>
+                                <?php else: ?>
+                                <?php if(auth()->user()->id!=$_post->user->id): ?>
+                                    <span class="pr-1 pl-1">•</span>
+
+
+                                        <follow-button user-id="<?php echo e($_post->user->id); ?>"
+                                                       follows="<?php echo e($follows); ?>"></follow-button>
+                                <?php endif; ?>
+                                <?php endif; ?>
+
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update',$_post->user->profile)): ?>
+                                    <form class="d-inline" action="<?php echo e(route('post.destroy',['post'=>$_post])); ?>"
+                                          method="post">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('delete'); ?>
+                                        <button class="btn btn-danger " type="submit"><i class="fas fa-trash"></i>
+                                        </button>
+                                        <a href="<?php echo e(route('post.edit',['post'=>$_post])); ?>"><i class="fas fa-pen"></i></a>
+
+                                    </form>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -32,30 +54,25 @@
                         </span>
                         <?php echo e($_post->caption); ?>
 
+                        <?php if(auth()->guard()->guest()): ?>
+                            <?php else: ?>
                         <like-button post-id="<?php echo e($_post->id); ?>" likes="<?php echo e($liked); ?>" count="<?php echo e($likes); ?>"></like-button>
+                            <?php endif; ?>
                     </p>
 
                 </div>
-                <?php $__currentLoopData = $comments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $comment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="row ">
-                      <p>
-                           <img src="<?php echo e($comment->profile->profileImage()); ?>" class="rounded-circle w-100"
-                                style="max-width: 30px">
-                           <span class="font-weight-bold">
-                            <a href="<?php echo e(route('profile.show',['profile'=>$comment->profile->user->username])); ?>">
-                                <span class="text-dark"><?php echo e($comment->profile->user->username); ?></span>
-                            </a>
-                        </span> <span><?php echo e($comment->content); ?></span>
+                <?php if(auth()->guard()->guest()): ?>
+                    <comment post-id="<?php echo e($_post->id); ?>" post-owner="<?php echo e($_post->user->username); ?>"
+                             username="<?php echo e(null); ?>"
+                             image="<?php echo e(null); ?>"
+                             route="<?php echo e(null); ?>"></comment>
+                    <?php else: ?>
+                    <comment post-id="<?php echo e($_post->id); ?>" post-owner="<?php echo e($_post->user->username); ?>"
+                             username="<?php echo e(auth()->user()->username); ?>"
+                             image="<?php echo e(auth()->user()->profile->profileImage()); ?>"
+                             route="<?php echo e(route("profile.show",auth()->user()->username)); ?>"></comment>
+                    <?php endif; ?>
 
-
-                      </p>
-                        <like-comment-button comment-id="<?php echo e($comment->id); ?>" likes="<?php echo e(auth()->user()->likeComment->contains($comment->id)); ?>" count="<?php echo e($comment->liked->count()); ?>"></like-comment-button>
-
-
-
-                    </div>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                <a href="<?php echo e(route('comment.create',['post'=>$_post->id])); ?>" class="btn btn-primary">Add Comment</a>
 
             </div>
         </div>

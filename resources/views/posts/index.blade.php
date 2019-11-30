@@ -2,12 +2,38 @@
 
 @section('content')
     <div class="container">
+        <post></post>
         @foreach($posts as $_post)
             <div class="row ">
                 <div class="col-6 offset-3">
-                    <a href="{{route('post.show',['post'=>$_post->id])}}">
-                        <img src="{{$_post->postImage()}}" class="w-100">
-                    </a>
+                    @if($_post->type->name=='video')
+                        <video width="320" height="240" controls="controls" class="w-100">
+                            <source src="{{$_post->resource}}" type="video/mp4">
+                            <source src="{{$_post->resource}}" type="video/ogg">
+                            <source src="{{$_post->resource}}" type="video/webm">
+                            Your browser does not support the video tag.
+                        </video>
+
+                    @elseif($_post->type->name=='audio')
+                        <audio controls>
+                            <source src="{{$_post->resource}}" type="audio/ogg">
+                            <source src="{{$_post->resource}}" type="audio/mpeg">
+                            <source src="{{$_post->resource}}" type="audio/wav">
+                            Your browser does not support the audio tag.
+                        </audio>
+                    @elseif($_post->type->name=='image')
+                        <a href="{{route('post.show',['post'=>$_post->id])}}">
+                            <img src="{{$_post->postImage($_post->type)}}" class="w-100">
+
+                        </a>
+                    @else
+                        <a href="{{$_post->resource}}">
+                            <img src="{{$_post->postImage($_post->type)}}" class="w-100">
+
+                        </a>
+                    @endif
+
+
                 </div>
             </div>
             <div class="row pt-2 pb-4">
@@ -21,14 +47,18 @@
                             </a>
                         </span>
                             {{$_post->caption}}
-                            <like-button post-id="{{$_post->id}}" likes="{{auth()->user()->like->contains($_post->id)}}" count="{{$_post->liked->count()}}"></like-button>
-                            <i class="far fa-comment pl-2"></i>
-                            <span>{{$_post->commentsCount()}}</span>
-
                         </p>
                     </div>
                 </div>
+                <div class="col-6 offset-3">
+                    <like-button like-id="{{$_post->id}}" likes="{{auth()->user()->like->contains($_post->id)}}"
+                                 count="{{$_post->liked->count()}}" store-route="/like/">
+                    </like-button>
+                    <i class="far fa-comment pl-2"></i>
+                    <span>{{$_post->commentsCount()}}</span>
+                </div>
             </div>
+
 
         @endforeach
             <div class="row">

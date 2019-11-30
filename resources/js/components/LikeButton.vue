@@ -8,7 +8,7 @@
 
 <script>
     export default {
-        props: ['postId', 'likes','count'],
+        props: ['likeId', 'likes','count','storeRoute'],
         mounted() {
             //console.log('Component mounted.')
         },
@@ -26,7 +26,7 @@
         methods: {
             likePost() {
                 //alert('inside');
-                axios.post('/like/' + this.postId)
+                axios.post(this.storeRoute  + this.likeId)
                     .then(response => {
 
                          this.status = !this.status;

@@ -2,7 +2,7 @@
     <div class="container">
         <?php $__currentLoopData = $followers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $follower): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="row pb-3 ">
-            
+
                     <img src="<?php echo e($follower->profile->profileImage()); ?>" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
 
                <a href="<?php echo e(route('profile.show',['profile'=>$follower->username])); ?>"><?php echo e($follower->username); ?></a>
