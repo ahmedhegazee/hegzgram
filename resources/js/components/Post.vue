@@ -9,7 +9,7 @@
             axios.get('/posts')
                 .then(response=>this.posts=response.data)
                 .catch(error => {});
-            console.log(this.posts);
+            // console.log(this.posts);
         },
         data:function(){
             return{

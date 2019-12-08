@@ -98,7 +98,7 @@
                             this.comment['id'] = response.data;
                             this.comments.push(this.comment);
                             this.content = "";
-                            console.log(this.comment['id']);
+                            // console.log(this.comment['id']);
                         }).catch(errors => {
                     });
 

@@ -22,7 +22,7 @@
     export default {
     props:['userId'],
         mounted() {
-              console.log(this.userId);
+              // console.log(this.userId);
         },
         data: function () {
             return {
@@ -42,7 +42,7 @@
                 axios.get('/search', { params: { query: this.query } })
                     .then(response => this.results = response.data)
                     .catch(error => {});
-                console.log(this.results);
+                // console.log(this.results);
             }
         },
 
