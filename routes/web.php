@@ -32,7 +32,7 @@ Route::post('/liker/{reply}','LikesController@storeReplyLike');
 
 Route::resource('profile','ProfileController')->only(['show','edit','update','store']);
 Route::resource('post','PostsController')->middleware('auth')->except('show');
-Route::get('/post/{post}','PostsController@show');
+Route::get('/post/{post}','PostsController@show')->name('post.show');
 //Posts Routes
 Route::get('/', 'PostsController@index')->name('home')->middleware('auth');
 Route::get('/posts','PostsController@posts')->middleware('auth');

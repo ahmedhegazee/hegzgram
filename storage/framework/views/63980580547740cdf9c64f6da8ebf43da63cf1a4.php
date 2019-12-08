@@ -5,20 +5,24 @@
             <div class="row ">
                 <div class="col-6 offset-3">
                     <?php if($_post->type->name=='video'): ?>
-                        <video width="320" height="240" controls="controls" class="w-100">
-                            <source src="<?php echo e($_post->resource); ?>" type="video/mp4">
-                            <source src="<?php echo e($_post->resource); ?>" type="video/ogg">
-                            <source src="<?php echo e($_post->resource); ?>" type="video/webm">
-                            Your browser does not support the video tag.
-                        </video>
+                        <v-player source="<?php echo e(asset($_post->resource)); ?>"></v-player>
+
+
+
+
+
+
+
 
                     <?php elseif($_post->type->name=='audio'): ?>
-                        <audio controls>
-                            <source src="<?php echo e($_post->resource); ?>" type="audio/ogg">
-                            <source src="<?php echo e($_post->resource); ?>" type="audio/mpeg">
-                            <source src="<?php echo e($_post->resource); ?>" type="audio/wav">
-                            Your browser does not support the audio tag.
-                        </audio>
+                        <vue-audio source="<?php echo e(asset($_post->resource)); ?>"></vue-audio>
+
+
+
+
+
+
+
                     <?php elseif($_post->type->name=='image'): ?>
                         <a href="<?php echo e(route('post.show',['post'=>$_post->id])); ?>">
                             <img src="<?php echo e($_post->postImage($_post->type)); ?>" class="w-100">
@@ -38,7 +42,8 @@
                 <div class="col-6 offset-3">
                     <div>
                         <p>
-                            <img src="<?php echo e($_post->user->profile->profileImage()); ?>" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
+                            <img src="<?php echo e($_post->user->profile->profileImage()); ?>" class="rounded-circle mr-2"
+                                 style="max-height:30px; max-width:30px;">
                             <span class="font-weight-bold"><a href="
                                     <?php echo e(route('profile.show',['profile'=>$_post->user->username])); ?>">
                                 <span class="text-dark"><?php echo e($_post->user->username); ?></span>
@@ -46,27 +51,36 @@
                         </span>
                             <?php echo e($_post->caption); ?>
 
+                            <like-button like-id="<?php echo e($_post->id); ?>" likes="<?php echo e(auth()->user()->like->contains($_post->id)); ?>"
+                                         count="<?php echo e($_post->liked->count()); ?>" store-route="/like/">
+                            </like-button>
                         </p>
+
+
                     </div>
                 </div>
                 <div class="col-6 offset-3">
-                    <like-button like-id="<?php echo e($_post->id); ?>" likes="<?php echo e(auth()->user()->like->contains($_post->id)); ?>"
-                                 count="<?php echo e($_post->liked->count()); ?>" store-route="/like/">
-                    </like-button>
-                    <i class="far fa-comment pl-2"></i>
-                    <span><?php echo e($_post->commentsCount()); ?></span>
+
+
+                    <comment post-id="<?php echo e($_post->id); ?>" post-owner="<?php echo e($_post->user->username); ?>"
+                             username="<?php echo e(auth()->user()->username); ?>"
+                             image="<?php echo e(auth()->user()->profile->profileImage()); ?>"
+                             route="<?php echo e(route("profile.show",auth()->user()->username)); ?>"></comment>
+                    
+                    
+
                 </div>
             </div>
 
 
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            <div class="row">
-                <div class="col-12 d-flex justify-content-center">
-                    <!--Creates Pagination Links-->
-                    <?php echo e($posts->links()); ?>
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+                <!--Creates Pagination Links-->
+                <?php echo e($posts->links()); ?>
 
-                </div>
             </div>
+        </div>
     </div>
 <?php $__env->stopSection(); ?>
 

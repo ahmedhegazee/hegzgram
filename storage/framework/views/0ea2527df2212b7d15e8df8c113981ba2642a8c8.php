@@ -19,6 +19,8 @@
     <!-- Styles -->
     <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(asset('css/style.css')); ?>" rel="stylesheet">
+
+
     <style>
         @media (min-width: 1200px) {
             .container {
@@ -114,6 +116,7 @@
 
 </div>
 <script src="<?php echo e(asset('js/script.js')); ?>"></script>
+
 </body>
 
 </html>

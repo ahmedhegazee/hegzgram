@@ -111,7 +111,7 @@ class CommentsController extends Controller
         return 'Successful Updating';
     }
 
-    public function destroyComments(Comment $comment)
+    public function destroy(Comment $comment)
     {
         $comment->replies()->delete();
         $comment->delete();

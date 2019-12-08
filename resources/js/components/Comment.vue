@@ -25,8 +25,12 @@
                 <i v-if="username===comment.username||username===postOwner" class="fas fa-trash " @click="showDeleteDialog(comment)"></i>
                 <i class="fas fa-reply" @click="replying(comment)"></i>
             </div>
+            <div class="col-12">
                 <reply v-if="parseInt(comment.replies_count)>0" :comment-id="comment.id"  :username="username"
-                   :image="image" :replies="comment.replies" :route="route" :post-owner="postOwner"></reply>
+                       :image="image" :replies="comment.replies" :route="route" :post-owner="postOwner"></reply>
+            </div>
+
+
             <div v-if="comment.add_reply" class="row justify-content-end offset-1 col-12">
                 <input type="text" v-model="replyContent" class="form-control mb-2">
                 <i @click="closeReplying(comment)" id="close1" class="fas fa-times"></i>
@@ -82,7 +86,7 @@
         },
         methods: {
             addComment() {
-                if(this.editContent.length>8) {
+                if(this.content.length>8) {
                     this.comment['content'] = this.content;
                     this.comment['image'] = this.image;
                     this.comment['route'] = this.route;
@@ -92,10 +96,12 @@
                     axios.post("/comments/" + this.postId, {params: {content: this.content}})
                         .then(response => {
                             this.comment['id'] = response.data;
+                            this.comments.push(this.comment);
+                            this.content = "";
+                            console.log(this.comment['id']);
                         }).catch(errors => {
                     });
-                    this.comments.push(this.comment);
-                    this.content = "";
+
                 }
                 else{
                     this.showMessage('The length of the comment must be more than 8 characters');
@@ -160,11 +166,12 @@
                     axios.post("/replies/" + comment.id, {params: {content: this.replyContent}})
                         .then(response => {
                             this.reply['id'] = response.data;
+                            comment.replies.push(this.reply);
+                            this.replyContent = "";
+                            comment.add_reply = false;
                         }).catch(errors => {
                     });
-                    comment.replies.push(this.reply);
-                    this.replyContent = "";
-                    comment.add_reply = false;
+
                 }
             else{
                     this.showMessage('The length of the reply must be more than 8 characters');

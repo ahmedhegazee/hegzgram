@@ -19,6 +19,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+
     <style>
         @media (min-width: 1200px) {
             .container {
@@ -113,6 +115,7 @@
 
 </div>
 <script src="{{asset('js/script.js')}}"></script>
+
 </body>
 
 </html>

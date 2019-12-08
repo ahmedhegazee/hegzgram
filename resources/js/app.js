@@ -5,8 +5,20 @@
  */
 
 require('./bootstrap');
+import VueAudio from 'vue-audio-better'
 
 window.Vue = require('vue');
+Vue.use(VueAudio);
+import VueVideoPlayer from 'vue-video-player';
+
+// require videojs style
+import 'video.js/dist/video-js.css';
+// import 'vue-video-player/src/custom-theme.css'
+
+Vue.use(VueVideoPlayer, /* {
+  options: global default options,
+  events: global videojs events
+} */);
 
 /**
  * The following block of code may be used to automatically register your
@@ -26,7 +38,9 @@ Vue.component('like-button', require('./components/LikeButton.vue').default);
 Vue.component('search-bar', require('./components/SearchBar.vue').default);
 Vue.component('post', require('./components/Post.vue').default);
 Vue.component('comment', require('./components/Comment.vue').default);
+Vue.component('comment-section', require('./components/CommentSection.vue').default);
 Vue.component('reply', require('./components/Reply.vue').default);
+Vue.component('v-player', require('./components/Vplayer.vue').default);
 // Vue.component('add-new-post', require('./components/AddNewPost.vue').default);
 
 /**

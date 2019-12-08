@@ -1,5 +1,9 @@
 @extends('layouts.app')
-
+<style>
+    .vueAudioBetter{
+       width:300px !important;
+    }
+</style>
 @section('content')
     <div class="container">
         <div class="row ">
@@ -24,9 +28,7 @@
 
                     @endcan
                 </div>
-                @can('update',$user->profile)
-                    <a href="{{route('profile.edit',['profile'=>Auth::user()->username])}}">Edit Profile </a>
-                @endcan
+
                 <div class="d-flex">
                     <div class="pr-5"><strong>{{$postsCount}}</strong> posts</div>
                     <a href="{{route('profile.followers',['profile'=>$user->username])}}"
@@ -46,19 +48,22 @@
                 @foreach($posts as $post)
                     <div class="col-md-4 col-sm-12 pb-5">
                         @if($post->type->name=='video')
-                            <video width="320" height="240" controls="controls" class="w-100">
-                                <source src="{{$post->resource}}" type="video/mp4">
-                                <source src="{{$post->resource}}" type="video/ogg">
-                                <source src="{{$post->resource}}" type="video/webm">
-                                Your browser does not support the video tag.
-                            </video>
+                            <v-player source="{{asset($post->resource)}}"></v-player>
+{{--                            <video width="320" height="240" controls="controls" class="w-100">--}}
+{{--                                <source src="{{$post->resource}}" type="video/mp4">--}}
+{{--                                <source src="{{$post->resource}}" type="video/ogg">--}}
+{{--                                <source src="{{$post->resource}}" type="video/webm">--}}
+{{--                                Your browser does not support the video tag.--}}
+{{--                            </video>--}}
                         @elseif($post->type->name=='audio')
-                            <audio controls>
-                                <source src="{{$post->resource}}" type="audio/ogg">
-                                <source src="{{$post->resource}}" type="audio/mpeg">
-                                <source src="{{$post->resource}}" type="audio/wav">
-                                Your browser does not support the audio tag.
-                            </audio>
+                            <vue-audio  source="{{asset($post->resource)}}"></vue-audio>
+
+                            {{--                            <audio controls>--}}
+{{--                                <source src="{{$post->resource}}" type="audio/ogg">--}}
+{{--                                <source src="{{$post->resource}}" type="audio/mpeg">--}}
+{{--                                <source src="{{$post->resource}}" type="audio/wav">--}}
+{{--                                Your browser does not support the audio tag.--}}
+{{--                            </audio>--}}
                         @elseif($post->type->name=='image')
                             <a href="{{route('post.show',['post'=>$post->id])}}">
                                 <img src="{{$post->postImage($post->type)}}" class="w-100">

@@ -21,12 +21,16 @@
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
+        "video.js": "^7.6.6",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.10.2",
         "font-awesome": "^4.7.0",
-        "laravel-echo": "^1.6.1"
+        "howler": "^2.1.2",
+        "laravel-echo": "^1.6.1",
+        "vue-audio-better": "^1.1.1",
+        "vue-video-player": "^5.0.2"
     }
 }

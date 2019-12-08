@@ -1,3 +1,8 @@
+<style>
+    .vueAudioBetter{
+       width:300px !important;
+    }
+</style>
 <?php $__env->startSection('content'); ?>
     <div class="container">
         <div class="row ">
@@ -22,9 +27,7 @@
 
                     <?php endif; ?>
                 </div>
-                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update',$user->profile)): ?>
-                    <a href="<?php echo e(route('profile.edit',['profile'=>Auth::user()->username])); ?>">Edit Profile </a>
-                <?php endif; ?>
+
                 <div class="d-flex">
                     <div class="pr-5"><strong><?php echo e($postsCount); ?></strong> posts</div>
                     <a href="<?php echo e(route('profile.followers',['profile'=>$user->username])); ?>"
@@ -44,19 +47,22 @@
                 <?php $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="col-md-4 col-sm-12 pb-5">
                         <?php if($post->type->name=='video'): ?>
-                            <video width="320" height="240" controls="controls" class="w-100">
-                                <source src="<?php echo e($post->resource); ?>" type="video/mp4">
-                                <source src="<?php echo e($post->resource); ?>" type="video/ogg">
-                                <source src="<?php echo e($post->resource); ?>" type="video/webm">
-                                Your browser does not support the video tag.
-                            </video>
+                            <v-player source="<?php echo e(asset($post->resource)); ?>"></v-player>
+
+
+
+
+
+
                         <?php elseif($post->type->name=='audio'): ?>
-                            <audio controls>
-                                <source src="<?php echo e($post->resource); ?>" type="audio/ogg">
-                                <source src="<?php echo e($post->resource); ?>" type="audio/mpeg">
-                                <source src="<?php echo e($post->resource); ?>" type="audio/wav">
-                                Your browser does not support the audio tag.
-                            </audio>
+                            <vue-audio  source="<?php echo e(asset($post->resource)); ?>"></vue-audio>
+
+                            
+
+
+
+
+
                         <?php elseif($post->type->name=='image'): ?>
                             <a href="<?php echo e(route('post.show',['post'=>$post->id])); ?>">
                                 <img src="<?php echo e($post->postImage($post->type)); ?>" class="w-100">
