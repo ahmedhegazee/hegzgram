@@ -1,6 +1,6 @@
 <template>
     <div id="search">
-        <input type="text" placeholder="Search" v-model="query">
+        <input type="text" placeholder="Write username" v-model="query">
         <div id="searchList">
             <ul class="list-group"  v-if="results.length > 0 && query">
                 <li  class="list-group-item list" v-for="result in results.slice(0,10)" :key="result.id" v-if="userId!=result.userId">

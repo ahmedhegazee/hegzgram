@@ -39926,7 +39926,7 @@ var render = function() {
           expression: "query"
         }
       ],
-      attrs: { type: "text", placeholder: "Search" },
+      attrs: { type: "text", placeholder: "Write username" },
       domProps: { value: _vm.query },
       on: {
         input: function($event) {

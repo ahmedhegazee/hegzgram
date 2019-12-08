@@ -90,3 +90,16 @@ color:#000;
 .rate{
     display:none;
 }
+.content-card,.post-card{
+    background: #fff;
+
+    box-shadow: 0 12px 12px 0 rgba(0,0,0,0.2),0 16px 20px 0 rgba(0,0,0,0.19) !important;
+}
+.content-card{
+    padding: 20px;
+}
+.post-card p{
+    padding: 10px;
+    text-align: center;
+    font-size: 14pt;
+}
