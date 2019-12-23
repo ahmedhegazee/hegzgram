@@ -14,10 +14,7 @@ class Profile extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function followers()
-    {
-        return $this->belongsToMany(User::class)->withTimestamps();
-}
+
     public function profileImage()
     {
         $defaultImage='default/ccRp67CBjTSpm5R0SlR82dHK0qe0dpkj9CI6MepV.png';

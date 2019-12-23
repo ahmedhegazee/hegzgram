@@ -24,7 +24,7 @@ class PostsController extends Controller
 
     public function posts()
     {
-        $users = auth()->user()->following()->pluck('profiles.user_id')->toArray();
+        $users = auth()->user()->following()->pluck('followee')->toArray();
         //latest() == orderBy('created_at','DESC')
         //$posts=Post::whereIn('user_id',$users)->latest()->get();
         //paginate(number of records in the page)
@@ -39,7 +39,7 @@ class PostsController extends Controller
     }
     public function index()
     {
-        $users = auth()->user()->following()->pluck('profiles.user_id')->toArray();
+        $users = auth()->user()->following()->pluck('followee')->toArray();
         //latest() == orderBy('created_at','DESC')
         //$posts=Post::whereIn('user_id',$users)->latest()->get();
         //paginate(number of records in the page)

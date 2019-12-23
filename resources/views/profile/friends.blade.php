@@ -7,15 +7,15 @@
         @foreach($waitings as $waiting)
             <div class="row pb-3 ">
                 <div class="col-3">
-                    <img src="{{$waiting->profile->first()->profileImage()}}" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
+                    <img src="{{$waiting->profile->profileImage()}}" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
 
-                    <a href="{{route('profile.show',['profile'=>$waiting->user->first()->username])}}">{{$waiting->user->first()->name}}</a>
+                    <a href="{{route('profile.show',['profile'=>$waiting->username])}}">{{$waiting->name}}</a>
 
                 </div>
                 <div class="col-3">
                                              @can('update',$profile)
 
-                                                    <accept-button profile-id="{{$waiting->user->first()->id}}" ></accept-button>
+                                                    <accept-button profile-id="{{$waiting->id}}" ></accept-button>
 
                                                 @endcan
                 </div>
@@ -26,39 +26,20 @@
                 <h1>Friends List</h1>
 
                     @foreach($friends as $friend)
-                        @if(isset($friend->toArray()['user']))
+
                         <div class="row pb-3 ">
                             <div class="col-3">
-                                <img src="{{$friend->user->first()->profile->profileImage()}}" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
-
-                                <a href="{{route('profile.show',['profile'=>$friend->user->first()->username])}}">{{$friend->user->first()->name}}</a>
-
+                                <img src="{{$friend->profile->profileImage()}}" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
+                                <a href="{{route('profile.show',['profile'=>$friend->username])}}">{{$friend->name}}</a>
                             </div>
                             <div class="col-3">
                                 @can('update',$profile)
 
-                                    <friend-button profile-id="{{$friend->user->first()->id}}" friend="1"
+                                    <friend-button profile-id="{{$friend->id}}" friend="1"
                                                    accept="1"></friend-button>
                                 @endcan
                             </div>
                         </div>
-                    @else
-                        <div class="row pb-3 ">
-                            <div class="col-3">
-                                <img src="{{$friend->profile->first()->profileImage()}}" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
-
-                                <a href="{{route('profile.show',['profile'=>$friend->profile->first()->user->username])}}">{{$friend->profile->first()->user->name}}</a>
-
-                            </div>
-                            <div class="col-3">
-                                @can('update',$profile)
-
-                                    <friend-button profile-id="{{$friend->profile->first()->id}}" friend="1"
-                                                   accept="1"></friend-button>
-                                @endcan
-                            </div>
-                        </div>
-                            @endif
                     @endforeach
 
 @endif

@@ -5,15 +5,15 @@
         <?php $__currentLoopData = $waitings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $waiting): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="row pb-3 ">
                 <div class="col-3">
-                    <img src="<?php echo e($waiting->profile->first()->profileImage()); ?>" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
+                    <img src="<?php echo e($waiting->profile->profileImage()); ?>" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
 
-                    <a href="<?php echo e(route('profile.show',['profile'=>$waiting->user->first()->username])); ?>"><?php echo e($waiting->user->first()->name); ?></a>
+                    <a href="<?php echo e(route('profile.show',['profile'=>$waiting->username])); ?>"><?php echo e($waiting->name); ?></a>
 
                 </div>
                 <div class="col-3">
                                              <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update',$profile)): ?>
 
-                                                    <accept-button profile-id="<?php echo e($waiting->user->first()->id); ?>" ></accept-button>
+                                                    <accept-button profile-id="<?php echo e($waiting->id); ?>" ></accept-button>
 
                                                 <?php endif; ?>
                 </div>
@@ -24,39 +24,20 @@
                 <h1>Friends List</h1>
 
                     <?php $__currentLoopData = $friends; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $friend): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <?php if(isset($friend->toArray()['user'])): ?>
+
                         <div class="row pb-3 ">
                             <div class="col-3">
-                                <img src="<?php echo e($friend->user->first()->profile->profileImage()); ?>" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
-
-                                <a href="<?php echo e(route('profile.show',['profile'=>$friend->user->first()->username])); ?>"><?php echo e($friend->user->first()->name); ?></a>
-
+                                <img src="<?php echo e($friend->profile->profileImage()); ?>" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
+                                <a href="<?php echo e(route('profile.show',['profile'=>$friend->username])); ?>"><?php echo e($friend->name); ?></a>
                             </div>
                             <div class="col-3">
                                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update',$profile)): ?>
 
-                                    <friend-button profile-id="<?php echo e($friend->user->first()->id); ?>" friend="1"
+                                    <friend-button profile-id="<?php echo e($friend->id); ?>" friend="1"
                                                    accept="1"></friend-button>
                                 <?php endif; ?>
                             </div>
                         </div>
-                    <?php else: ?>
-                        <div class="row pb-3 ">
-                            <div class="col-3">
-                                <img src="<?php echo e($friend->profile->first()->profileImage()); ?>" class="rounded-circle mr-2" style="max-height:30px; max-width:30px;">
-
-                                <a href="<?php echo e(route('profile.show',['profile'=>$friend->profile->first()->user->username])); ?>"><?php echo e($friend->profile->first()->user->name); ?></a>
-
-                            </div>
-                            <div class="col-3">
-                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('update',$profile)): ?>
-
-                                    <friend-button profile-id="<?php echo e($friend->profile->first()->id); ?>" friend="1"
-                                                   accept="1"></friend-button>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                            <?php endif; ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 <?php endif; ?>

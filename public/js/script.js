@@ -1,7 +1,6 @@
 function showSearch () {
-    document.getElementById("overlay").classList.remove("d-none");
+    document.getElementById("search-result").classList.remove("d-none");
 };
 function closeSearch() {
-    document.getElementById("overlay").classList.add("d-none");
-
+    document.getElementById("search-result").classList.add("d-none");
 };

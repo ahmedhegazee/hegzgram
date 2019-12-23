@@ -101,7 +101,7 @@
     <main class="py-4">
         <?php echo $__env->yieldContent('content'); ?>
     </main>
-    <div id="overlay" class="overlay d-none">
+    <div id="search-result" class="overlay d-none">
         <div class="content">
             <i id="close" onclick="closeSearch()"  class="fas fa-times"></i>
             <h3 class="text-center mb-4">Search for profiles</h3>

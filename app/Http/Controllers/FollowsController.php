@@ -17,6 +17,6 @@ class FollowsController extends Controller
     {
        // return $user->username;
         //toggle() is for attach and deattach the relationship
-    return auth()->user()->following()->toggle($user->profile);
+    return auth()->user()->following()->toggle($user->id);
     }
 }

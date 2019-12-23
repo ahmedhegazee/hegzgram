@@ -1,7 +1,9 @@
 <style>
-    .vueAudioBetter{
-       width:300px !important;
+    .vueAudioBetter {
+        width: 300px !important;
+
     }
+
 </style>
 <?php $__env->startSection('content'); ?>
     <div class="container">
@@ -31,13 +33,46 @@
                     </div>
 
                     <div class="d-flex">
-                        <div class="pr-5"><strong><?php echo e($postsCount); ?></strong>  <i class="far fa-images fa-2x"></i></div>
-                        <a href="<?php echo e(route('profile.followers',['profile'=>$user->username])); ?>"
-                           class="pr-5"><strong><?php echo e($followersCount); ?></strong>  <i class="fas fa-users fa-2x"></i></a>
-                        <a href="<?php echo e(route('profile.followings',['profile'=>$user->username])); ?>"
-                           class="pr-5"><strong><?php echo e($followeringsCount); ?></strong>  <i class="fas fa-user-plus fa-2x"></i></a>
-                        <a href="<?php echo e(route('profile.friends',['profile'=>$user->profile])); ?>"
-                           class="pr-5"><strong><?php echo e($friendsCount); ?></strong> <i class="fas fa-user-friends fa-2x"></i> </a>
+                        <div class="pr-5"><strong><?php echo e($postsCount); ?></strong> <i class="far fa-images fa-2x"></i></div>
+                        <div class="pr-5">
+                            <info-button
+                                count="<?php echo e($followersCount); ?>"
+                                message="Followers List"
+                                font-class="fas fa-users fa-2x"
+                                link="/followers/"
+                                current-user="<?php echo e(auth()->user()!=null?auth()->user()->id:null); ?>"
+                                is-login="<?php echo e(auth()->user()!=null); ?>"
+                                user-id="<?php echo e($user->id); ?>"
+                            ></info-button>
+                        </div>
+                        <div class="pr-5">
+                            <info-button
+                                count="<?php echo e($followeringsCount); ?>"
+                                message="Followings List"
+                                font-class="fas fa-user-plus fa-2x"
+                                link="/followings/"
+                                current-user="<?php echo e(auth()->user()!=null?auth()->user()->id:null); ?>"
+                                is-login="<?php echo e(auth()->user()!=null); ?>"
+                                user-id="<?php echo e($user->id); ?>"
+                            ></info-button>
+                        </div>
+                        <div class="pr-5">
+                            <info-button
+                                count="<?php echo e($friendsCount); ?>"
+                                message="Friends List"
+                                font-class="fas fa-user-friends fa-2x"
+                                link="/friends/"
+                                current-user="<?php echo e(auth()->user()!=null?auth()->user()->id:null); ?>"
+                                is-login="<?php echo e(auth()->user()!=null); ?>"
+                                user-id="<?php echo e($user->id); ?>"
+                            ></info-button>
+                        </div>
+                        
+                        
+                        
+                        
+                        
+                        
                     </div>
                     <div class="pt-4 font-weight-bold"><?php echo e($user->profile->title); ?></div>
                     <div><?php echo e($user->profile->description); ?></div>
@@ -50,41 +85,41 @@
                 <?php $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="col-md-4 col-sm-12 pb-5">
                         <div class="post-card">
-                        <?php if($post->type->name=='video'): ?>
-                            <v-player source="<?php echo e(asset($post->resource)); ?>"></v-player>
+                            <?php if($post->type->name=='video'): ?>
+                                <v-player source="<?php echo e(asset($post->resource)); ?>"></v-player>
+                                
+                                
+                                
+                                
+                                
+                                
+                            <?php elseif($post->type->name=='audio'): ?>
+                                <vue-audio source="<?php echo e(asset($post->resource)); ?>"></vue-audio>
 
+                                
+                                
+                                
+                                
+                                
+                                
+                            <?php elseif($post->type->name=='image'): ?>
 
-
-
-
-
-                        <?php elseif($post->type->name=='audio'): ?>
-                            <vue-audio  source="<?php echo e(asset($post->resource)); ?>"></vue-audio>
-
-                            
-
-
-
-
-
-                        <?php elseif($post->type->name=='image'): ?>
-
-                            <a href="<?php echo e(route('post.show',['post'=>$post->id])); ?>">
+                                <a href="<?php echo e(route('post.show',['post'=>$post->id])); ?>">
 
                                     <img src="<?php echo e($post->postImage($post->type)); ?>" class="w-100">
 
-                            </a>
+                                </a>
 
                             <?php else: ?>
-                            <a href="<?php echo e($post->resource); ?>">
-                                <img src="<?php echo e($post->postImage($post->type)); ?>" class="w-100">
+                                <a href="<?php echo e($post->resource); ?>">
+                                    <img src="<?php echo e($post->postImage($post->type)); ?>" class="w-100">
 
-                            </a>
+                                </a>
 
-                        <?php endif; ?>
+                            <?php endif; ?>
                             <p><?php echo e($post->caption); ?></p>
 
-                    </div>
+                        </div>
                     </div>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 

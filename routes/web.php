@@ -37,9 +37,9 @@ Route::get('/post/{post}','PostsController@show')->name('post.show');
 Route::get('/', 'PostsController@index')->name('home')->middleware('auth');
 Route::get('/posts','PostsController@posts')->middleware('auth');
 
-Route::get('/profile/{profile}/followers','ProfileController@followers')->name('profile.followers');
-Route::get('/profile/{profile}/followings','ProfileController@followings')->name('profile.followings');
-Route::get('/profile/{profile}/friends','ProfileController@friends')->name('profile.friends');
+Route::get('/followers/{profile}','ProfileController@followers')->name('profile.followers');
+Route::get('/followings/{profile}','ProfileController@followings')->name('profile.followings');
+Route::get('/friends/{profile}','ProfileController@friends')->name('profile.friends');
 
 Route::any('/search', function () {
     $q = request()->get('q');
@@ -48,13 +48,13 @@ Route::any('/search', function () {
         return redirect()->back()->with('details', $user);
     else return redirect()->back()->with('message', 'No Users found. Try to search again !');
 })->name('result');
-Route::any('/friend/{profile}',function(\App\Profile $profile){
-    if(auth()->user()->profile->id !=$profile->id)
-  return auth()->user()->friends()->toggle($profile);
+Route::any('/friend/{user}',function(\App\User $user){
+    if(auth()->user()->id !=$user->id)
+  return auth()->user()->toggleFriendRequest($user);
 });
 
-Route::any('/friend/{profile}/accept',function(\App\Profile $profile){
-   return auth()->user()->profile->friends()->updateExistingPivot($profile,['status'=>1]);
+Route::any('/friend/{user}/accept',function(\App\User $user){
+   return auth()->user()->acceptFriendRequest($user);
 });
 Route::get('/search','UserSearchController@index');
 

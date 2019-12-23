@@ -1,8 +1,10 @@
 @extends('layouts.app')
 <style>
-    .vueAudioBetter{
-       width:300px !important;
+    .vueAudioBetter {
+        width: 300px !important;
+
     }
+
 </style>
 @section('content')
     <div class="container">
@@ -32,13 +34,46 @@
                     </div>
 
                     <div class="d-flex">
-                        <div class="pr-5"><strong>{{$postsCount}}</strong>  <i class="far fa-images fa-2x"></i></div>
-                        <a href="{{route('profile.followers',['profile'=>$user->username])}}"
-                           class="pr-5"><strong>{{ $followersCount}}</strong>  <i class="fas fa-users fa-2x"></i></a>
-                        <a href="{{route('profile.followings',['profile'=>$user->username])}}"
-                           class="pr-5"><strong>{{$followeringsCount}}</strong>  <i class="fas fa-user-plus fa-2x"></i></a>
-                        <a href="{{route('profile.friends',['profile'=>$user->profile])}}"
-                           class="pr-5"><strong>{{$friendsCount}}</strong> <i class="fas fa-user-friends fa-2x"></i> </a>
+                        <div class="pr-5"><strong>{{$postsCount}}</strong> <i class="far fa-images fa-2x"></i></div>
+                        <div class="pr-5">
+                            <info-button
+                                count="{{ $followersCount}}"
+                                message="Followers List"
+                                font-class="fas fa-users fa-2x"
+                                link="/followers/"
+                                current-user="{{auth()->user()!=null?auth()->user()->id:null}}"
+                                is-login="{{auth()->user()!=null}}"
+                                user-id="{{$user->id}}"
+                            ></info-button>
+                        </div>
+                        <div class="pr-5">
+                            <info-button
+                                count="{{ $followeringsCount}}"
+                                message="Followings List"
+                                font-class="fas fa-user-plus fa-2x"
+                                link="/followings/"
+                                current-user="{{auth()->user()!=null?auth()->user()->id:null}}"
+                                is-login="{{auth()->user()!=null}}"
+                                user-id="{{$user->id}}"
+                            ></info-button>
+                        </div>
+                        <div class="pr-5">
+                            <info-button
+                                count="{{ $friendsCount}}"
+                                message="Friends List"
+                                font-class="fas fa-user-friends fa-2x"
+                                link="/friends/"
+                                current-user="{{auth()->user()!=null?auth()->user()->id:null}}"
+                                is-login="{{auth()->user()!=null}}"
+                                user-id="{{$user->id}}"
+                            ></info-button>
+                        </div>
+                        {{--                        <a href="{{route('profile.followers',['profile'=>$user->username])}}"--}}
+                        {{--                           class="pr-5"><strong>{{ $followersCount}}</strong>  <i class="fas fa-users fa-2x"></i></a>--}}
+                        {{--                        <a href="{{route('profile.followings',['profile'=>$user->username])}}"--}}
+                        {{--                           class="pr-5"><strong>{{$followeringsCount}}</strong>  <i class="fas fa-user-plus fa-2x"></i></a>--}}
+                        {{--                        <a href="{{route('profile.friends',['profile'=>$user->profile])}}"--}}
+                        {{--                           class="pr-5"><strong>{{$friendsCount}}</strong> <i class="fas fa-user-friends fa-2x"></i> </a>--}}
                     </div>
                     <div class="pt-4 font-weight-bold">{{$user->profile->title}}</div>
                     <div>{{$user->profile->description}}</div>
@@ -51,41 +86,41 @@
                 @foreach($posts as $post)
                     <div class="col-md-4 col-sm-12 pb-5">
                         <div class="post-card">
-                        @if($post->type->name=='video')
-                            <v-player source="{{asset($post->resource)}}"></v-player>
-{{--                            <video width="320" height="240" controls="controls" class="w-100">--}}
-{{--                                <source src="{{$post->resource}}" type="video/mp4">--}}
-{{--                                <source src="{{$post->resource}}" type="video/ogg">--}}
-{{--                                <source src="{{$post->resource}}" type="video/webm">--}}
-{{--                                Your browser does not support the video tag.--}}
-{{--                            </video>--}}
-                        @elseif($post->type->name=='audio')
-                            <vue-audio  source="{{asset($post->resource)}}"></vue-audio>
+                            @if($post->type->name=='video')
+                                <v-player source="{{asset($post->resource)}}"></v-player>
+                                {{--                            <video width="320" height="240" controls="controls" class="w-100">--}}
+                                {{--                                <source src="{{$post->resource}}" type="video/mp4">--}}
+                                {{--                                <source src="{{$post->resource}}" type="video/ogg">--}}
+                                {{--                                <source src="{{$post->resource}}" type="video/webm">--}}
+                                {{--                                Your browser does not support the video tag.--}}
+                                {{--                            </video>--}}
+                            @elseif($post->type->name=='audio')
+                                <vue-audio source="{{asset($post->resource)}}"></vue-audio>
 
-                            {{--                            <audio controls>--}}
-{{--                                <source src="{{$post->resource}}" type="audio/ogg">--}}
-{{--                                <source src="{{$post->resource}}" type="audio/mpeg">--}}
-{{--                                <source src="{{$post->resource}}" type="audio/wav">--}}
-{{--                                Your browser does not support the audio tag.--}}
-{{--                            </audio>--}}
-                        @elseif($post->type->name=='image')
+                                {{--                            <audio controls>--}}
+                                {{--                                <source src="{{$post->resource}}" type="audio/ogg">--}}
+                                {{--                                <source src="{{$post->resource}}" type="audio/mpeg">--}}
+                                {{--                                <source src="{{$post->resource}}" type="audio/wav">--}}
+                                {{--                                Your browser does not support the audio tag.--}}
+                                {{--                            </audio>--}}
+                            @elseif($post->type->name=='image')
 
-                            <a href="{{route('post.show',['post'=>$post->id])}}">
+                                <a href="{{route('post.show',['post'=>$post->id])}}">
 
                                     <img src="{{$post->postImage($post->type)}}" class="w-100">
 
-                            </a>
+                                </a>
 
                             @else
-                            <a href="{{$post->resource}}">
-                                <img src="{{$post->postImage($post->type)}}" class="w-100">
+                                <a href="{{$post->resource}}">
+                                    <img src="{{$post->postImage($post->type)}}" class="w-100">
 
-                            </a>
+                                </a>
 
-                        @endif
+                            @endif
                             <p>{{$post->caption}}</p>
 
-                    </div>
+                        </div>
                     </div>
                 @endforeach
 

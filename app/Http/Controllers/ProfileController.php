@@ -5,20 +5,19 @@ namespace App\Http\Controllers;
 use App\Friend;
 use App\Profile;
 use App\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Route;
 use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
 {
 
 
-    public function edit( $profile)
+    public function edit($profile)
     {
         //$user = $profile;
-        $user =User::where('username',$profile)->get();
-        $user=$user[0];
+        $user = User::where('username', $profile)->get();
+        $user = $user[0];
         //to authorize update operation to let only the current user to update his profile
         $this->authorize('update', $user->profile);
         return view('profile.edit',
@@ -26,9 +25,9 @@ class ProfileController extends Controller
         );
     }
 
-    public function update( $profile)
+    public function update($profile)
     {
-        $user =User::where('username',$profile)->first();
+        $user = User::where('username', $profile)->first();
 
         //to authorize update operation to let only the current user to update his profile
         $this->authorize('update', $user->profile);
@@ -63,37 +62,34 @@ class ProfileController extends Controller
         return redirect(route('profile.show', ['profile' => auth()->user()->username]));
     }
 
-    public function show( $profile)
+    public function show($profile)
     {
-        //$user = User::findOrFail($profile);
         // get user by using username
-        $user =User::where('username',$profile)->first();
-//        dd($profile);
-//dd($user);
-        //$user = $profile;
-        //dd($user[0]->id);
-        if(!auth()->guest()){
+        $user = User::where('username', $profile)->first();
+
+        if (!auth()->guest()) {
             //this for the following button to check if this profile is followed or not
             $follows = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
 //        $friend = (auth()->user()) ? auth()->user()->friends->contains($user->id) : false;
-            $friend=auth()->user()->friends->contains($user->id);
-            if($friend)
-                $accept=auth()->user()->friends()->where('profile_id',$user->id)->first()->pivot->status;
+//            $friend = auth()->user()->getFriends()->contains($user->id);
+            $friend = auth()->user()->hasFriendRequest($user);
+//            dd($friend);
+            if ($friend)
+//                $accept = auth()->user()->friendsOfMine()->where('friend_id', $user->id)->first()->pivot->status;
+                $accept = auth()->user()->getFriends()->contains($user->id);
             else
-                $accept=false;
+                $accept = false;
+        } else {
+            $follows = 0;
+            $friend = 0;
+            $accept = 0;
         }
-        else{
-            $follows=0;
-            $friend=0;
-            $accept=0;
-        }
-
+//dd($accept);
         //dd($follows);
 //        $postsCount = Cache::remember('count.posts.' . $user->id, function () use ($user) {
 //            return $user->posts->count();
 //        });
         //create cache to make the counting queries is more less
-
         $postsCount = Cache::remember('count.posts.' . $user->id, now()->addSeconds(30), function () use ($user) {
             return $user->posts->count();
         });
@@ -101,7 +97,7 @@ class ProfileController extends Controller
             'count.followers.' . $user->id,
             now()->addSeconds(30),
             function () use ($user) {
-                return $user->profile->followers->count();
+                return $user->followers->count();
             });
         $followeringsCount = Cache::remember(
             'count.followings.' . $user->id,
@@ -113,9 +109,9 @@ class ProfileController extends Controller
             'count.friends.' . $user->id,
             now()->addSeconds(30),
             function () use ($user) {
-                return $user->friends()->where('status',1)->count();
+                return $user->getFriends()->count();
             });
-        $posts=$user->posts()->paginate(15);
+        $posts = $user->posts()->paginate(15);
         return view('profile.show',
             compact(
                 'user',
@@ -146,7 +142,7 @@ class ProfileController extends Controller
         $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
         $image->save();
         //store the image path in image field in data array
-        $data['image'] = "/storage/".$imagePath;
+        $data['image'] = "/storage/" . $imagePath;
         //add user id when you create new record in post table
         auth()->user()->profile->create($data);
         //Post::create($data);
@@ -155,35 +151,98 @@ class ProfileController extends Controller
 
     }
 
-    public function followers($profile)
+    public function preparingData(Collection $collection)
     {
-        $user =User::where('username',$profile)->get();
-        //dd($user);
-        $followers = $user[0]->profile->followers;
-//        dd($followers->toArray());
-        return view('profile.followers',compact('followers'));
+        return $collection->map(function ($friend) {
+            $check = auth()->user()->hasFriendRequest($friend);
+            if ($check)
+                return [
+                    'id' => $friend->id,
+                    'userId' => $friend->id,
+                    'username' => $friend->username,
+                    'url' => route('profile.show', $friend->username),
+                    'image' => $friend->profile->profileImage(),
+                    'friend' => $check,
+                    'accept' => auth()->user()->getFriends()->contains("id", $friend->id),
+                    'follows' => auth()->user()->following->contains($friend->id),
+                ];
+            else
+                return [
+                    'id' => $friend->id,
+                    'userId' => $friend->id,
+                    'username' => $friend->username,
+                    'url' => route('profile.show', $friend->username),
+                    'image' => $friend->profile->profileImage(),
+                    'friend' => $check,
+                    'follows' => auth()->user()->following->contains($friend->id),
+                    'accept' => false,
+                ];
+        })->values()->all();
     }
-    public function followings($profile)
+    public function followers(Profile $profile)
     {
-        $user =User::where('username',$profile)->get();
-        //dd($user);
-        $followings = $user[0]->following;
-//        dd($followers->toArray());
-        return view('profile.followings',compact('followings'));
+//        $followers = $profile->followers()
+//            ->get()->map(function ($follower) {
+//                return [
+//                    'id' => $follower->id,
+//                    'userId' => $follower->id,
+//                    'username' => $follower->username,
+//                    'url' => route('profile.show', $follower->username),
+//                    'image' => $follower->profile->profileImage(),
+//                    'follows' => auth()->user()->following->contains($follower->id)
+//
+//                ];
+//            })->values()->all();
+        $followers = $this->preparingData($profile->user->followers()->get());
+        return response()->json($followers);
+    }
+
+    public function followings(Profile $profile)
+    {
+//        $followings = $profile->user->following()->get()->map(function ($following) {
+//            return [
+//                'id' => $following->id,
+//                'userId' => $following->id,
+//                'username' => $following->user->username,
+//                'url' => route('profile.show', $following->user->username),
+//                'image' => $following->profileImage(),
+//                'follows' => auth()->user()->following->contains($following->id)
+//            ];
+//        })->values()->all();
+        $followings = $this->preparingData($profile->user->following()->get());
+        return response()->json($followings);
     }
 
     public function friends(Profile $profile)
     {
-       $friends =Friend::where('user_id',$profile->id)->where('status',1)->with('profile')->get();
-       $friends =$friends->concat(Friend::where('profile_id',$profile->id)->where('status',1)->with('user')->get());
-
-//        $friends=$profile->friends()->where('status',1)->get();
+//        dd($profile->user->getFriends());
+//        $friends = $profile->user->getFriends()->map(function ($friend) use ($profile) {
+//            $check = auth()->user()->hasFriendRequest($friend);
+//            if ($check)
+//                return [
+//                    'id' => $friend->id,
+//                    'userId' => $friend->id,
+//                    'username' => $friend->username,
+//                    'url' => route('profile.show', $friend->username),
+//                    'image' => $friend->profile->profileImage(),
+//                    'friend' => $check,
+//                    'accept' => auth()->user()->getFriends()->contains("id", $friend->id),
+//                ];
+//            else
+//                return [
+//                    'id' => $friend->id,
+//                    'userId' => $friend->id,
+//                    'username' => $friend->username,
+//                    'url' => route('profile.show', $friend->username),
+//                    'image' => $friend->profile->profileImage(),
+//                    'friend' => $check,
+//                    'accept' => false,
+//                ];
 //
-//        $friends=$friends->concat($profile->user->friends()->where('status',1)->get());
-//        dd($friends);
-
-//        dd($profile->user->friends()->where('status',1)->get());
-        $waitings=Friend::where('status',0)->where('profile_id',$profile->id)->with('profile')->get();
-        return view('profile.friends',compact('friends','waitings','profile'));
-        }
+//        })->values()->all();
+//        $waitings = $profile->user->getPendingFriendRequests();
+//        return view('profile.friends', compact('friends', 'waitings', 'profile'));
+        $friends = $this->preparingData($profile->user->getFriends());
+        return response()->json($friends);
+    }
 }

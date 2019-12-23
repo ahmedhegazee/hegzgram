@@ -13,10 +13,12 @@ class CreatesProfileUserPivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('profile_user', function (Blueprint $table) {
+        Schema::create('followings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('profile_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('follower');//One who is following a person (followee).
+            $table->unsignedBigInteger('followee');//One who is followed
+            $table->foreign('follower')->on('users')->references('id');
+            $table->foreign('followee')->on('users')->references('id');
             $table->timestamps();
         });
     }

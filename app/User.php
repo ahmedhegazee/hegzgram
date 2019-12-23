@@ -16,7 +16,6 @@ class User extends Authenticatable implements Searchable
     use Notifiable;
 
 
-
     public function getSearchResult(): SearchResult
     {
         $url = route('profile.show', $this->username);
@@ -71,9 +70,12 @@ class User extends Authenticatable implements Searchable
 
     public function following()
     {
-        return $this->belongsToMany(Profile::class)->withTimestamps();
+        return $this->belongsToMany(User::class,'followings','follower','followee')->withTimestamps();
     }
-
+    public function followers()
+    {
+        return $this->belongsToMany(User::class,'followings','followee','follower')->withTimestamps();
+    }
     public function posts()
     {
         return $this->hasMany(Post::class)->orderBy('created_at', 'DESC');
@@ -99,12 +101,58 @@ class User extends Authenticatable implements Searchable
         return $this->hasOne(Profile::class);
     }
 
-    public function friends()
+    public function friendsOfMine()
     {
-        return $this->belongsToMany(Profile::class, 'friends')
-            ->using('App\Friend')
+        return $this->belongsToMany('\App\User', 'friends', 'user_id', 'friend_id')
             ->withPivot('status')
             ->withTimestamps();
     }
 
+    public function friendsOfThisUser()
+    {
+        return $this->belongsToMany('\App\User', 'friends', 'friend_id', 'user_id')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+
+    public function toggleFriendRequest(User $user)
+    {
+        if ($this->id != $user->id)
+            return $this->friendsOfMine()->toggle($user->id);
+        return false;
+
+    }
+
+    public function removeFriendRequest(User $user)
+    {
+        if ($this->id != $user->id) {
+            return $this->friendsOfThisUser()->detach($user->id);
+        }
+        return false;
+    }
+    public function acceptFriendRequest(User $user)
+    {
+            return $this->friendsOfThisUser()->updateExistingPivot($user,['status'=>1]);
+    }
+
+    public function getFriendRequests()
+    {
+        return $this->friendsOfMine()->where('status', 0)->get();
+    }
+
+    public function hasFriendRequest(User $user)
+    {
+        return $user->friendsOfMine->contains($this->id)||$user->friendsOfThisUser->contains($this->id);
+}
+
+    public function getFriends()
+    {
+        return $this->friendsOfMine()->where('status', 1)->get()
+            ->concat($this->friendsOfThisUser()->where('status', 1)->get());
+    }
+
+    public function getPendingFriendRequests()
+    {
+        return $this->friendsOfThisUser()->where('status', 0)->get();
+    }
 }
