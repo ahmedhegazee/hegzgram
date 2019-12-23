@@ -19,7 +19,6 @@ return array(
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\FollowsController' => $baseDir . '/app/Http/Controllers/FollowsController.php',
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
-    'App\\Http\\Controllers\\LikesCommentController' => $baseDir . '/app/Http/Controllers/LikesCommentController.php',
     'App\\Http\\Controllers\\LikesController' => $baseDir . '/app/Http/Controllers/LikesController.php',
     'App\\Http\\Controllers\\PostsController' => $baseDir . '/app/Http/Controllers/PostsController.php',
     'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
